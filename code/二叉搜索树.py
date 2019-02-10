@@ -192,6 +192,7 @@ class BinaryTree(Tree):
 
         def __init__(self, container, node):
             self.container = container
+
             self.node = node
 
         def element(self):
@@ -219,14 +220,15 @@ class BinaryTree(Tree):
         return self.Position(self, node) if node is not None else None
 
     def __init__(self):
-        self.root = None
+        self._root = None
         self.size = 0
 
     def __len__(self):
         return self.size
 
     def root(self):
-        return self.make_position(self.root)
+
+        return self.make_position(self._root)
 
     def parent(self, p):
         node = self.validate(p)
@@ -266,11 +268,11 @@ class BinaryTree(Tree):
             yield self.right(p)
 
     def add_root(self, e):
-        if self.root is not None:
+        if self._root is not None:
             raise ValueError('Root exists')
         self.size += 1
-        self.root = self.Node(e)
-        return self.make_position(self.root)
+        self._root = self.Node(e)
+        return self.make_position(self._root)
 
     def add_left(self, p, e):
         node = self.validate(p)
@@ -305,8 +307,8 @@ class BinaryTree(Tree):
         child = node.left if node.left else node.right
         if child is not None:
             child.parent = node.parent
-        if node is self.root:
-            self.root = child
+        if node is self._root:
+            self._root = child
         else:
             parent = node.parent
             if node is parent.left:
@@ -385,6 +387,7 @@ class OrderedMap(BinaryTree, MutableMapping):
 
     def _subtree_search(self, p, k):
         """搜索算法"""
+
         if k == p.key():
             return p
         elif k < p.key():
@@ -461,6 +464,7 @@ class OrderedMap(BinaryTree, MutableMapping):
         if self.is_empty():
             leaf = self.add_root(self._Item(k, v))
         else:
+
             p = self._subtree_search(self.root(), k)
             if p.key() == k:
                 p.element().value = v
@@ -524,3 +528,10 @@ class OrderedMap(BinaryTree, MutableMapping):
             while p is not None and (stop is None or p.key() < stop):
                 yield (p.key(), p.value())
                 p = self.after(p)
+
+# tree = OrderedMap()
+# tree[1] = 1
+# tree[7] = 7
+# tree[2] = 2
+# for (k,v) in tree.items():
+#     print(v)
